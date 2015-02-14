@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!--
+    <string name="app_name">SeekIt</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">NOOOOO</string>
+    <string name="action_editUsu">Perfil</string>
+    <string name="action_editTri">edicion</string>
+    <string name="action_new">Add TRI</string>
+    <string name="action_notificaciones">notificaciones</string>
+    <string name="action_logout">Logout</string>
+    <string name="button_send">algo</string>
+    <string name="title_activity_pantalla_rastreo">PantallaRastreo</string>
+    <string name="title_activity_mainactivity">TRIs</string>
+    <string name="title_activity_maps">Maps</string>
+    <string name="title_activity_add_tri">AddTri</string>
+    <string name="title_activity_login">Login</string>
+    <string name="title_activity_registro">Registro</string>
+    <string name="title_activity_editar_usuario">EditarUsuario</string>
+    <string name="title_activity_editar_tri">EditarTri</string>
+    <string name="title_activity_pantalla_compartir">PantallaCompartir</string>
+    <string name="title_activity_pantalla_notoficaciones">PantallaNotoficaciones</string>
+-->
+    <string name="app_name">SeekIt</string>
+    <string name="action_settings">Cerrar Sesión</string>
+    <string name="action_edit_user">Editar perfil</string>
+    <string name="action_tri">Borrar TRI</string>
+    <string name="action_new">Agregar TRI</string>
+    <string name="button_send">SFSD</string>
+    <string name="title_activity_pantalla_rastreo">Localizar TRI</string>
+    <string name="title_activity_mainactivity">TRIs</string>
+    <string name="title_activity_maps">Maps</string>
+    <string name="title_activity_add_tri">Agregar Tri</string>
+    <string name="title_activity_edit_tri">Editar Tri</string>
+
+    <string name="title_activity_login">Login</string>
+    <string name="title_activity_registro">Registro</string>
+    <string name="title_activity_share">Compartir Tri</string>
+    <string name="username_hint">Usuario</string>
+    <string name="password_hint">Contrasenia</string>
+    <string name="name_hint">Nombre</string>
+    <string name="password_hint_confirm">Confirmar Contrasenia</string>
+    <string name="email_hint">Mail</string>
+    <string name="sign_up_button_label">Registrar</string>
+    <string name="cancel_button_label">Cancelar</string>
+    <string name="share_button_label">Compartir!</string>
+    <string name="login_button_label">INICIAR</string>
+    <string name="no_tiene_usuario">No tiene usuario?</string>
+    <string name="registrese">Registrese!</string>
+    <string name="empty_list">Vacio!</string>
+    <string name="content_desc_message_icon">content_desc_message_icon</string>
+
+
+    <string name="action_notificaciones">notificaciones</string>
+    <string name="action_editUsu">Perfil</string>
+    <string name="action_logout">Logout</string>
+    <string name="action_editTri">edicion</string>
+
+
+    <string name="title_activity_editar_usuario">EditarUsuario</string>
+    <string name="title_activity_editar_tri">EditarTri</string>
+    <string name="title_activity_pantalla_compartir">PantallaCompartir</string>
+    <string name="title_activity_pantalla_notoficaciones">PantallaNotoficaciones</string>
+    <string name="title_activity_share_activity">Pantalla compartir</string>
+</resources>

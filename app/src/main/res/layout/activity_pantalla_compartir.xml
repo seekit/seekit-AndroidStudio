@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    
+    tools:context="com.example.seekit.PantallaCompartir" >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <EditText
+            android:id="@+id/editMailPantallaCompartir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            
+            android:hint="MAIL a compartir" />
+
+        <EditText
+            android:id="@+id/editDescripcionPantallaCompartir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            
+            android:hint="Descripcion No Obligatoria" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="compartirTri"
+            android:text="Compartir" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <ListView
+            android:id="@+id/ListView_listadoPantallaCompartir"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+        </ListView>
+    </LinearLayout>
+
+</LinearLayout>

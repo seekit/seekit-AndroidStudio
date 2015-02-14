@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="C:\Users\maximiliano-hill\Desktop\tesis\Android Studio Workspace\Seekit\app\libs\android-async-http-1.4.6.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="a845a88238be0b5be9d238652c1bc0605ef91f52">
+        <dex dex="C:\Users\maximiliano-hill\Desktop\tesis\Android Studio Workspace\Seekit\app\build\intermediates\pre-dexed\debug\android-async-http-1.4.6-783bc2e6504af9c1fe5a200391919bdd3eeff511.jar" />
+    </item>
+    <item
+        jar="C:\adt-bundle-windows-x86-20140702\sdk\extras\android\m2repository\com\android\support\support-annotations\21.0.0\support-annotations-21.0.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="1a578b9607b36266c63d43a4fa0ab5664dbe911e">
+        <dex dex="C:\Users\maximiliano-hill\Desktop\tesis\Android Studio Workspace\Seekit\app\build\intermediates\pre-dexed\debug\support-annotations-21.0.0-04b663cf3c092bc45dc2c6a4bd13c681384effea.jar" />
+    </item>
+    <item
+        jar="C:\Users\maximiliano-hill\Desktop\tesis\Android Studio Workspace\Seekit\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.0\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="686344a780033e4ba22b926cd225f8d4941247e6">
+        <dex dex="C:\Users\maximiliano-hill\Desktop\tesis\Android Studio Workspace\Seekit\app\build\intermediates\pre-dexed\debug\classes-3f371f65f2e4944fd7b2c0ee206df03e17717267.jar" />
+    </item>
+    <item
+        jar="C:\Users\maximiliano-hill\Desktop\tesis\Android Studio Workspace\Seekit\app\build\intermediates\exploded-aar\com.google.android.gms\play-services\6.5.87\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="dd9247ea0fabe8ee479638c4b4a23e93752be256">
+        <dex dex="C:\Users\maximiliano-hill\Desktop\tesis\Android Studio Workspace\Seekit\app\build\intermediates\pre-dexed\debug\classes-4dd923e6487cfe5646dc6a309478f3af9697efad.jar" />
+    </item>
+    <item
+        jar="C:\Users\maximiliano-hill\Desktop\tesis\Android Studio Workspace\Seekit\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.0\libs\internal_impl-21.0.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="1609e6d42d0480b0f4188e2c29f75388fa12a8f0">
+        <dex dex="C:\Users\maximiliano-hill\Desktop\tesis\Android Studio Workspace\Seekit\app\build\intermediates\pre-dexed\debug\internal_impl-21.0.0-acae63c8c886503fcbe10919d424be07bdac5e61.jar" />
+    </item>
+
+</items>

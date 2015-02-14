@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_sin_logo"
+
+    tools:context="com.example.seekit.Login" >
+
+    <ImageView
+        android:id="@+id/logoSeekIt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="10dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/logo3" />
+
+    <LinearLayout
+        android:id="@+id/register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/loginButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="31dp"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/notAUSer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_tiene_usuario"
+            android:textColor="#000000"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/registrarse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/registrese"
+            android:textColor="#0080ff"
+            android:textSize="18sp"
+            android:textStyle="italic" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/editTextLayout"
+        style="@style/AuthFieldContainer"
+        android:layout_below="@+id/logoSeekIt"
+        android:layout_marginTop="47dp" >
+
+        <EditText
+            android:id="@+id/loginEmailField"
+            style="@style/AuthEditText"
+            android:hint="@string/username_hint" />
+
+        <EditText
+            android:id="@+id/loginPasswordField"
+            style="@style/AuthEditText"
+            android:hint="@string/password_hint"
+            android:inputType="textPassword" />
+
+        <requestFocus />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/loginButton"
+        android:onClick="Ingresar"
+        style="@style/AuthButton"
+        android:layout_below="@+id/editTextLayout"
+        android:text="@string/login_button_label"
+        />
+
+</RelativeLayout>

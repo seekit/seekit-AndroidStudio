@@ -1,0 +1,73 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.seekit.PantallaRastreo" >
+
+    <RelativeLayout
+        android:id="@+id/RContenedor"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/RelativeLayoutimg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="30dp" >
+
+            <ImageView
+                android:id="@+id/imageView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/wifi250x250" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutBtns"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
+            android:orientation="horizontal" >
+
+            <ImageButton
+                android:id="@+id/imageButtonShare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/share_icon" />
+
+            <LinearLayout
+                android:id="@+id/linearLayoutBtnLost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                
+                android:orientation="vertical" >
+
+                <ImageButton
+                    android:id="@+id/imageButtonLost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:src="@drawable/lost_icon" />
+                
+               <TextView
+                android:id="@+id/textViewInformePerdido"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="20sp" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/imageButtonMap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/map_icon" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

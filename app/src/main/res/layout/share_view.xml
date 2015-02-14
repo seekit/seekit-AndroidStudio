@@ -1,0 +1,79 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_sin_logo"
+
+    tools:context=".ShareActivity" >
+
+
+
+    <LinearLayout
+        android:id="@+id/editTextLayout"
+        style="@style/AuthFieldContainer"
+
+        android:layout_marginTop="200dp" >
+
+        <EditText
+            android:id="@+id/shareEmailField"
+            style="@style/AuthEditText"
+            android:hint="Email" />
+
+        <EditText
+            android:id="@+id/whyField"
+            style="@style/AuthEditText"
+            android:hint="Comentario (opcional)"
+            android:height="60dp"
+            android:gravity="bottom" />
+
+        <requestFocus />
+    </LinearLayout>
+
+
+
+
+    <ImageView
+        android:id="@+id/buttonDivider"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextLayout"
+        android:src="@drawable/button_divider_grey"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/shareButton"
+        style="@style/AuthButton"
+        android:layout_below="@+id/editTextLayout"
+        android:layout_marginRight="0dp"
+        android:layout_toLeftOf="@id/buttonDivider"
+        android:text="@string/share_button_label"
+        android:onClick="compartir"/>
+
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Share TRI"
+        android:textSize="50dp"
+
+        android:id="@+id/textView3"
+        android:layout_marginTop="30dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Con quiere compartir su TRI? Inique el e-mail de esa persona. "
+        android:id="@+id/shareDescription"
+        android:layout_below="@+id/textView3"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        android:gravity="center_horizontal" />
+
+
+</RelativeLayout>
+
