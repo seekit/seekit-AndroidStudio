@@ -49,7 +49,7 @@ public class FriendsFragment extends ListFragment {
     JSONArray jsonArray = null;
     String parentActivity = null;
     private ListView lista;
-    JSONObject json = null;
+    String json = null;
     String idUsuarioLogueado = null;
     String ip=null;
 
@@ -89,8 +89,6 @@ public class FriendsFragment extends ListFragment {
         }
 
 
-        FriendListAdapter adapter= new FriendListAdapter(getActivity().getApplicationContext(),listFriends);
-        setListAdapter(adapter);
 
 
         return rootView;
@@ -194,7 +192,9 @@ public class FriendsFragment extends ListFragment {
 
                             //reloadList(arrayListaUsuario);
                             listFriends=arrayListaUsuario;
+
                         }
+                        llamadaAlAdaptador();
                     }
 
                 } catch (JSONException e) {
@@ -216,6 +216,12 @@ public class FriendsFragment extends ListFragment {
 
         }
 
+    }
+
+    private void llamadaAlAdaptador() {
+        Log.d("lista del orto",listFriends.size()+"");
+        FriendListAdapter adapter= new FriendListAdapter(getActivity().getApplicationContext(),listFriends,idTri, ip, identificador,nombreTri,img,json);
+        setListAdapter(adapter);
     }
 /*
     private void reloadList(ArrayList<Usuario> arrayListaUsuario) {
@@ -279,51 +285,6 @@ public class FriendsFragment extends ListFragment {
     }
 */
 
-    private class GetDescompartirTriTask extends
-            AsyncTask<Object, Void, JSONObject> {
-
-        public String idUsuario=null;
-        void setIdUsuario(String idUsuario){
-            this.idUsuario=idUsuario;
-        }
-
-        @Override
-        protected JSONObject doInBackground(Object... params) {
-
-
-            JSONObject jsonResponse = null;
-            HttpClient client = new DefaultHttpClient();
-            String url = "http://"+ip+"/seekit/seekit/descompartirTri?idTri="+idTri+"&idUsuario="+idUsuario;
-            Log.d("panalla compartir", url);
-            HttpGet httpGet = new HttpGet(url);
-
-            try {
-
-                HttpResponse response = client.execute(httpGet);
-                StatusLine statusLine = response.getStatusLine();
-                statusCode = statusLine.getStatusCode();
-
-            } catch (Exception e) {
-
-                e.printStackTrace();
-
-            }
-            return jsonResponse;
-
-        }
-        @Override
-        protected void onPostExecute(JSONObject result) {
-
-            handleResult(result);
-        }
-
-        private void handleResult(JSONObject result) {
-            if(statusCode==200){
-                //recreate();
-            }
-        }
-
-    }
 
     private boolean isNetworkAvailable() {
         ConnectivityManager manager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -335,5 +296,53 @@ public class FriendsFragment extends ListFragment {
         }
 
         return isAvailable;
+    }
+
+    public String getIdTri() {
+        return idTri;
+    }
+
+    public void setIdTri(String idTri) {
+        this.idTri = idTri;
+    }
+
+    public String getIdentificador() {
+        return identificador;
+    }
+
+    public void setIdentificador(String identificador) {
+        this.identificador = identificador;
+    }
+
+    public String getNombreTri() {
+        return nombreTri;
+    }
+
+    public void setNombreTri(String nombreTri) {
+        this.nombreTri = nombreTri;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
+
+    public String getIdUsuarioLogueado() {
+        return idUsuarioLogueado;
+    }
+
+    public void setIdUsuarioLogueado(String idUsuarioLogueado) {
+        this.idUsuarioLogueado = idUsuarioLogueado;
+    }
+
+    public String getJson() {
+        return json;
+    }
+
+    public void setJson(String json) {
+        this.json = json;
     }
 }

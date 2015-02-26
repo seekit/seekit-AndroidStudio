@@ -6,7 +6,8 @@ public class TriCompartido {
 	private String nombre = null;
 	private String foto = null;
 	private String activo = null;
-	private String localizacion = null;
+	private String latitud = null;
+    private String longitud=null;
 	private String perdido = null;
 	private String compartido = null;
 	private String habilitado = null;
@@ -103,12 +104,12 @@ public class TriCompartido {
 		this.activo = activo;
 	}
 
-	public String getLocalizacion() {
-		return localizacion;
+	public String getLatitud() {
+		return latitud;
 	}
 
-	public void setLocalizacion(String localizacion) {
-		this.localizacion = localizacion;
+	public void setLatitud(String latitud) {
+		this.latitud = latitud;
 	}
 
 	public String getPerdido() {
@@ -141,5 +142,13 @@ public class TriCompartido {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public String getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(String longitud) {
+        this.longitud = longitud;
     }
 }

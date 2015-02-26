@@ -8,7 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.google.android.maps.MapActivity;
+
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -122,7 +122,8 @@ public class ObtenerJson {
 						Tri triAux = new Tri(tri.getString("idTri"),tri.getString("identificador"),
 								tri.getString("nombre"), tri.getString("foto"),
 								tri.getString("activo"), tri
-										.getString("localizacion"), tri
+										.getString("latitud"),tri
+                                .getString("longitud"), tri
 										.getString("perdido"), tri
 										.getString("compartido"), tri
                                 .getString("descripcion"));

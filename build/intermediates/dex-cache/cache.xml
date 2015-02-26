@@ -2,18 +2,18 @@
 <items version="2" >
 
     <item
-        jar="C:\Users\maximiliano-hill\Desktop\tesis\Android Studio Workspace\Seekit\app\libs\android-async-http-1.4.6.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="a845a88238be0b5be9d238652c1bc0605ef91f52">
-        <dex dex="C:\Users\maximiliano-hill\Desktop\tesis\Android Studio Workspace\Seekit\app\build\intermediates\pre-dexed\debug\android-async-http-1.4.6-783bc2e6504af9c1fe5a200391919bdd3eeff511.jar" />
-    </item>
-    <item
         jar="C:\adt-bundle-windows-x86-20140702\sdk\extras\android\m2repository\com\android\support\support-annotations\21.0.0\support-annotations-21.0.0.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="1a578b9607b36266c63d43a4fa0ab5664dbe911e">
         <dex dex="C:\Users\maximiliano-hill\Desktop\tesis\Android Studio Workspace\Seekit\app\build\intermediates\pre-dexed\debug\support-annotations-21.0.0-04b663cf3c092bc45dc2c6a4bd13c681384effea.jar" />
+    </item>
+    <item
+        jar="C:\Users\maximiliano-hill\Desktop\tesis\Android Studio Workspace\Seekit\app\libs\android-async-http-1.4.6.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="a845a88238be0b5be9d238652c1bc0605ef91f52">
+        <dex dex="C:\Users\maximiliano-hill\Desktop\tesis\Android Studio Workspace\Seekit\app\build\intermediates\pre-dexed\debug\android-async-http-1.4.6-783bc2e6504af9c1fe5a200391919bdd3eeff511.jar" />
     </item>
     <item
         jar="C:\Users\maximiliano-hill\Desktop\tesis\Android Studio Workspace\Seekit\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.0\classes.jar"
@@ -35,6 +35,13 @@
         revision="21.1.2"
         sha1="1609e6d42d0480b0f4188e2c29f75388fa12a8f0">
         <dex dex="C:\Users\maximiliano-hill\Desktop\tesis\Android Studio Workspace\Seekit\app\build\intermediates\pre-dexed\debug\internal_impl-21.0.0-acae63c8c886503fcbe10919d424be07bdac5e61.jar" />
+    </item>
+    <item
+        jar="C:\Users\maximiliano-hill\Desktop\tesis\Android Studio Workspace\Seekit\app\build\intermediates\exploded-aar\de.hdodenhof\circleimageview\1.2.1\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4b868b833b0887aa48c4e581558eef4f1196f6a2">
+        <dex dex="C:\Users\maximiliano-hill\Desktop\tesis\Android Studio Workspace\Seekit\app\build\intermediates\pre-dexed\debug\classes-326bbbed163a183d9d24d58007c882246c731c34.jar" />
     </item>
 
 </items>

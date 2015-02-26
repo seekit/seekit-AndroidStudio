@@ -6,21 +6,23 @@ public class Tri {
 	private String nombre;
 	private String foto;
 	private String activo;
-	private String localizacion;
+	private String latitud;
+    private String longitud;
 	private String perdido;
 	private String compartido;
     private String descripcion;
 
 
 	public Tri(String idTri, String identificador, String nombre, String foto, String activo,
-			String localizacion, String perdido, String compartido, String descripcion) {
+			String latitud,String longitud, String perdido, String compartido, String descripcion) {
 		super();
 		this.idTri=idTri;
 		this.identificador = identificador;
 		this.nombre = nombre;
 		this.foto = foto;
 		this.activo = activo;
-		this.localizacion = localizacion;
+		this.latitud = latitud;
+        this.longitud=longitud;
 		this.perdido = perdido;
 		this.compartido = compartido;
         this.descripcion=descripcion;
@@ -69,14 +71,6 @@ public class Tri {
 		this.activo = activo;
 	}
 
-	public String getLocalizacion() {
-		return localizacion;
-	}
-
-	public void setLocalizacion(String localizacion) {
-		this.localizacion = localizacion;
-	}
-
 	public String getPerdido() {
 		return perdido;
 	}
@@ -99,5 +93,21 @@ public class Tri {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public String getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(String longitud) {
+        this.longitud = longitud;
+    }
+
+    public String getLatitud() {
+        return latitud;
+    }
+
+    public void setLatitud(String latitud) {
+        this.latitud = latitud;
     }
 }

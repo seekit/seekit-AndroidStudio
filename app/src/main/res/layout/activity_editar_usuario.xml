@@ -84,10 +84,11 @@
 
 
             <EditText
-                android:id="@+id/editUsuarioUserPass"
+                android:id="@+id/editUsuarioUserPassOld"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/textview_border"
+                android:hint="Contrasena Actual"
                 android:paddingTop="6dp"
                 android:paddingBottom="8dp"
                 android:paddingLeft="6dp"
@@ -98,6 +99,54 @@
                 <requestFocus />
             </EditText>
         </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.25"
+        android:layout_marginTop="16dp">
+
+
+
+        <EditText
+            android:id="@+id/editUsuarioUserPassNew"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/textview_border"
+            android:hint="Nueva contrasena"
+            android:paddingTop="6dp"
+            android:paddingBottom="8dp"
+            android:paddingLeft="6dp"
+            android:textSize="18sp"
+            android:gravity="center_vertical"
+            android:inputType="textPassword" >
+
+            <requestFocus />
+        </EditText>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.25"
+        android:layout_marginTop="16dp">
+
+
+
+        <EditText
+            android:id="@+id/editUsuarioUserPassNewConfirm"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/textview_border"
+            android:hint="Confirmar contrasena"
+            android:paddingTop="6dp"
+            android:paddingBottom="8dp"
+            android:paddingLeft="6dp"
+            android:textSize="18sp"
+            android:gravity="center_vertical"
+            android:inputType="textPassword" >
+
+            <requestFocus />
+        </EditText>
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -114,8 +163,18 @@
             android:id="@+id/editTriButtonAccept"
             android:onClick="editarUsuario"
             android:layout_gravity="center_horizontal" />
+
+
     </RelativeLayout>
-
-
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.25"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_gravity="center">
+    <TextView
+        android:id="@+id/subtitle"
+        style="@style/AuthTitle.AuthSubTitleEditarUsuario" />
+    </RelativeLayout>
 
 </LinearLayout>

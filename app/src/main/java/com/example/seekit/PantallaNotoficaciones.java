@@ -16,12 +16,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import contenedor.Tri;
 import contenedor.TriCompartido;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -160,7 +158,8 @@ public class PantallaNotoficaciones extends Activity {
 							triObjComp.setHabilitado(listaTrisCompartido.getJSONObject(j).getString("habilitado"));
 							triObjComp.setIdentificador(listaTrisCompartido.getJSONObject(j).getString("identificador"));
 							triObjComp.setIdTri(listaTrisCompartido.getJSONObject(j).getString("idTri"));
-							triObjComp.setLocalizacion(listaTrisCompartido.getJSONObject(j).getString("localizacion"));
+							triObjComp.setLatitud(listaTrisCompartido.getJSONObject(j).getString("latitud"));
+                            triObjComp.setLongitud(listaTrisCompartido.getJSONObject(j).getString("longitud"));
 							triObjComp.setNombre(listaTrisCompartido.getJSONObject(j).getString("nombre"));
 							triObjComp.setPerdido(listaTrisCompartido.getJSONObject(j).getString("perdido"));
 							triObjComp.setNombrePropetario(listaTrisCompartido.getJSONObject(j).getString("nombreUsuario"));
@@ -302,7 +301,7 @@ public class PantallaNotoficaciones extends Activity {
 
 				HttpClient client = new DefaultHttpClient();
 				String id = json.getString("idUsuario");
-				String url = "http://192.168.56.1:8080/seekit/seekit/confirmarTri?idUsuario="
+				String url = "http://"+ip+"/seekit/seekit/confirmarTri?idUsuario="
 						+ id+"&idUsuarioPropietario="+idUsuarioPropietario+"&idTri="+idTri+"&confirmar="+confirmarTri;
 				Log.d("confirmando?",url);
 				HttpGet httpGet = new HttpGet(url);
@@ -313,7 +312,7 @@ public class PantallaNotoficaciones extends Activity {
 					StatusLine statusLine = response.getStatusLine();
 					statusCode = statusLine.getStatusCode();
 					if (statusCode == 200) {					}
-
+                        recreate();
 				} catch (Exception e) {
 
 					e.printStackTrace();
@@ -335,7 +334,7 @@ public class PantallaNotoficaciones extends Activity {
 
 		private void handleResult() {
 			if(statusCode==200){
-				recreate();
+				refresquemos();
 			}else{
 				Toast.makeText(PantallaNotoficaciones.this, "No se pudo procesar su solicitud.", Toast.LENGTH_LONG)
 				.show();
@@ -345,7 +344,11 @@ public class PantallaNotoficaciones extends Activity {
 		
 	}
 
-	private boolean isNetworkAvailable() {
+    private void refresquemos() {
+        recreate();
+    }
+
+    private boolean isNetworkAvailable() {
 
 		ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo networkInfo = manager.getActiveNetworkInfo();

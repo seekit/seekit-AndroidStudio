@@ -3,6 +3,11 @@ package com.example.seekit;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.net.URLEncoder;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 
 import android.app.ActionBar;
@@ -203,12 +208,24 @@ public class Registro extends Activity {
                 String mail = eIngresarMail.getText().toString();
 
                 EditText eIngresarContrasena = (EditText) findViewById(R.id.registroPasswordField);
-                String contrasena = eIngresarContrasena.getText().toString();
+                String pass = eIngresarContrasena.getText().toString();
+
+                String nombreUTF8=null;
+                String apellidoUTF8=null;
+                try {
+                    nombreUTF8 = URLEncoder.encode(nombre, "utf-8");
+                    apellidoUTF8 = URLEncoder.encode(apellido, "utf-8");
+                } catch (UnsupportedEncodingException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
 
                 HttpClient client = new DefaultHttpClient();
+
+                String passHasheado = hashearPass(pass);
                 String url="http://"+ip+"/seekit/seekit/register?mail="
-                + mail + "&contrasenia=" + contrasena
-                + "&nombre=" + nombre + "&apellido=" + apellido;
+                + mail + "&pass=" + passHasheado
+                + "&nombre=" + nombreUTF8 + "&apellido=" + apellidoUTF8;
 
                 Log.d("url",url);
 				HttpGet httpGet = new HttpGet(url);
@@ -252,7 +269,27 @@ public class Registro extends Activity {
 			return jsonResponse;
 		}
 
-		@Override
+        private String hashearPass(String pass) {
+            MessageDigest md = null;
+            String passwordHash=null;
+            try {
+                md = MessageDigest.getInstance("SHA-1");
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+
+
+            try {
+                md.update(pass.getBytes("UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            byte[] digest = md.digest();
+            passwordHash = new BigInteger(1, digest).toString(16);
+            return passwordHash;
+        }
+
+        @Override
 		protected void onPostExecute(JSONObject result) {
 
 			handleResult(result);
@@ -267,6 +304,7 @@ public class Registro extends Activity {
 				itn.putExtra("json", result.toString());
 				Log.d("asd",result.toString());
 				startActivity(itn);
+                Registro.this.finish();
 
 			} else {
 				if (statusCode == 0) {

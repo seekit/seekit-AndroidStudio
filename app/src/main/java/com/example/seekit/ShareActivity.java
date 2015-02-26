@@ -54,7 +54,7 @@ public class ShareActivity extends FragmentActivity implements
     String idTri = null;
     JSONObject json = null;
     String idUsuarioLogueado = null;
-String ip=null;
+    String ip=null;
 
 
 	public static final String TAG = MainActivity.class.getSimpleName();
@@ -112,7 +112,11 @@ String ip=null;
 		// primary sections of the app.
 		mSectionsPagerAdapter = new SectionsPagerAdapter(this, 
 				getSupportFragmentManager());
-
+        mSectionsPagerAdapter.setIdTri(idTri);
+        mSectionsPagerAdapter.setIdentificador(identificador);
+        mSectionsPagerAdapter.setImg(img);
+        mSectionsPagerAdapter.setNombreTri(nombreTri);
+        mSectionsPagerAdapter.setJson(json.toString());
 		// Set up the ViewPager with the sections adapter.
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 		mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -208,6 +212,13 @@ String ip=null;
         }
 
     }
+
+    public void descompartir(View view) {
+
+    }
+
+
+
     private class GetCompartirTriTask extends
             AsyncTask<Object, Void, JSONObject> {
 
@@ -217,13 +228,13 @@ String ip=null;
             String mail = eEditMail.getText().toString();
 
             EditText eEditDescripcion = (EditText) findViewById(R.id.whyField);
-            String editDescripcion = eEditDescripcion.getText().toString();
+            String comentario = eEditDescripcion.getText().toString();
 
             JSONObject jsonResponse = null;
             HttpClient client = new DefaultHttpClient();
-            String descUTF8 = null;
+            String comUTF8 = null;
             try {
-                descUTF8 = URLEncoder.encode(editDescripcion, "utf-8");
+                comUTF8 = URLEncoder.encode(comentario, "utf-8");
             } catch (UnsupportedEncodingException e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
@@ -237,8 +248,8 @@ String ip=null;
                     + idTri
                     + "&habilitado="
                     + "0"
-                    + "&descripcion="
-                    + descUTF8;
+                    + "&comentario="
+                    + comUTF8;
             Log.d("panalla compartir", url);
             HttpGet httpGet = new HttpGet(url);
 
@@ -325,4 +336,5 @@ String ip=null;
 
         return isAvailable;
     }
+
 }

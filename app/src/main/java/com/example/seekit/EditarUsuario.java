@@ -3,6 +3,10 @@ package com.example.seekit;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -61,12 +65,12 @@ public class EditarUsuario extends Activity {
 		EditText eIngresarNombre = (EditText) findViewById(R.id.editUsuarioUserName);
 		EditText eIngresarApellido = (EditText) findViewById(R.id.editUserUserApellido);
 		EditText eIngresarMail = (EditText) findViewById(R.id.editUsuarioUserMail);
-		EditText eIngresarContrasena = (EditText) findViewById(R.id.editUsuarioUserPass);
+
 		try {
 			eIngresarNombre.setText(obj.getString("nombre"));
 			eIngresarApellido.setText(obj.getString("apellido"));
 			eIngresarMail.setText(obj.getString("mail"));
-			eIngresarContrasena.setText(obj.getString("contrasenia"));
+
 		} catch (JSONException e) {
 			Log.d("Si estoy aca","Marchamos");
 			e.printStackTrace();
@@ -104,17 +108,33 @@ public class EditarUsuario extends Activity {
 		EditText eIngresarMail = (EditText) findViewById(R.id.editUsuarioUserMail);
 		String mail = eIngresarMail.getText().toString();
 
-		EditText eIngresarContrasena = (EditText) findViewById(R.id.editUsuarioUserPass);
-		String contrasena = eIngresarContrasena.getText().toString();
+		EditText eIngresarContrasenaOld = (EditText) findViewById(R.id.editUsuarioUserPassOld);
+		String contrasenaOld = eIngresarContrasenaOld.getText().toString();
+
+        EditText eIngresarContrasenaNew = (EditText) findViewById(R.id.editUsuarioUserPassNew);
+        String contrasenaNew = eIngresarContrasenaNew.getText().toString();
+
+        EditText eIngresarContrasenaNewConfirm = (EditText) findViewById(R.id.editUsuarioUserPassNewConfirm);
+        String contrasenaNewConfirm = eIngresarContrasenaNewConfirm.getText().toString();
 
 		if (TextUtils.isEmpty(nombre)) {
 			eIngresarNombre.setError("Por favor, introduzca su nombre");
 			return;
-		}
+		}else{
+            if (!isInputTextValid(nombre)) {
+                eIngresarNombre.setError("Formato invalido");
+                return;
+            }
+        }
 		if (TextUtils.isEmpty(apellido)) {
 			eIngresarApellido.setError("Por favor, introduzca su apellido");
 			return;
-		}
+		}else{
+            if (!isInputTextValid(apellido)) {
+                eIngresarApellido.setError("Formato invalido");
+                return;
+            }
+        }
 		if (TextUtils.isEmpty(mail)) {
 			eIngresarMail.setError("Por favor, introduzca su mail");
 			return;
@@ -124,10 +144,26 @@ public class EditarUsuario extends Activity {
 				return;
 			}
 		}
-		if (TextUtils.isEmpty(contrasena)) {
-			eIngresarContrasena.setError("Introduzca una contrasenia valida");
+		if (TextUtils.isEmpty(contrasenaOld)) {
+			eIngresarContrasenaOld.setError("Introduzca su actual contrasenia");
 			return;
 		}
+
+        if (!isInputTextValid(contrasenaNew)) {
+                eIngresarContrasenaNew.setError("Formato invalido");
+                return;
+         }
+
+        if(!contrasenaNew.equals(contrasenaNewConfirm)){
+            eIngresarContrasenaNewConfirm.setError("Las contrasenas no son iguales. Reintente.");
+            return;
+        }
+
+        if(!contrasenaNew.equals(contrasenaOld)){
+            eIngresarContrasenaNew.setError("No ponga la contraseña vieja igual a la nueva.");
+            return;
+        }
+
 		if (isNetworkAvailable()) {
 
 			GetEditUserTask getEditUserTask = new GetEditUserTask();
@@ -154,24 +190,49 @@ public class EditarUsuario extends Activity {
 				EditText eIngresarMail = (EditText) findViewById(R.id.editUsuarioUserMail);
 				String mail = eIngresarMail.getText().toString();
 
-				EditText eIngresarContrasena = (EditText) findViewById(R.id.editUsuarioUserPass);
-				String contrasenia = eIngresarContrasena.getText().toString();
+				EditText eIngresarContrasenaOld = (EditText) findViewById(R.id.editUsuarioUserPassOld);
+				String passOld = eIngresarContrasenaOld.getText().toString();
+
+                EditText eIngresarContrasenaNew = (EditText) findViewById(R.id.editUsuarioUserPassNew);
+                String passNew = eIngresarContrasenaNew.getText().toString();
+
 
 				HttpClient client = new DefaultHttpClient();
 
 				JSONObject obj = new JSONObject(getIntent().getStringExtra(
 						"json"));
-				
-				String url = "http://"+ip+"/seekit/seekit/editarUsuario?idUsuario="
-						+ obj.getString("idUsuario")
-						+ "&nombre="
-						+ nombre
-						+ "&apellido="
-						+ apellido
-						+ "&mail="
-						+ mail
-						+ "&contrasenia=" + contrasenia;
-Log.d("editar usuario",url);
+                String url;
+
+                String passHasheadoOld = hashearPass(passOld);
+                String passHasheadoNew = hashearPass(passNew);
+
+                if (TextUtils.isEmpty(passNew)) {
+                    url = "http://" + ip + "/seekit/seekit/editarUsuario?idUsuario="
+                            + obj.getString("idUsuario")
+                            + "&nombre="
+                            + nombre
+                            + "&apellido="
+                            + apellido
+                            + "&mail="
+                            + mail
+                            + "&passviejo="
+                            + passHasheadoOld;
+
+                }else {
+                    url = "http://" + ip + "/seekit/seekit/editarUsuario?idUsuario="
+                            + obj.getString("idUsuario")
+                            + "&nombre="
+                            + nombre
+                            + "&apellido="
+                            + apellido
+                            + "&mail="
+                            + mail
+                            + "&passviejo="
+                            + passHasheadoOld
+                            + "&passnuevo="
+                            + passHasheadoNew;
+                }
+                Log.d("editar usuario",url);
 				HttpGet httpGet = new HttpGet(url);
 				
 				try {
@@ -212,8 +273,29 @@ Log.d("editar usuario",url);
 			}
 			return jsonResponse;
 		}
-		
-		@Override
+
+        private String hashearPass(String pass) {
+
+            MessageDigest md = null;
+            String passwordHash=null;
+            try {
+                md = MessageDigest.getInstance("SHA-1");
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+
+
+            try {
+                md.update(pass.getBytes("UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            byte[] digest = md.digest();
+            passwordHash = new BigInteger(1, digest).toString(16);
+            return passwordHash;
+        }
+
+        @Override
 		protected void onPostExecute(JSONObject result) {
 
 			handleResult(result);
@@ -274,4 +356,19 @@ Log.d("editar usuario",url);
 		else
 			return false;
 	}
+
+    private boolean isInputTextValid(String inputText) {
+
+        String regExpn = "[a-zA-Z0-9 ]+$";
+
+        CharSequence inputStr = inputText;
+
+        Pattern pattern = Pattern.compile(regExpn, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(inputStr);
+
+        if (matcher.matches())
+            return true;
+        else
+            return false;
+    }
 }

@@ -7,6 +7,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
@@ -90,6 +94,7 @@ public class Login extends Activity {
         String usuario = null;
         usuario = pref.getString("usuario", "null");
 //IP
+
         try {
             ResourceBundle bundle1 = ResourceBundle.getBundle("assets/configuration");
             ip = bundle1.getString("ip");
@@ -153,17 +158,7 @@ public class Login extends Activity {
         });
     }
 
-    private boolean isNetworkAvailable() {
-        ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
 
-        boolean isAvailable = false;
-        if (networkInfo != null && networkInfo.isConnected()) {
-            isAvailable = true;
-        }
-
-        return isAvailable;
-    }
 
     //registro
     void inicializadores() {
@@ -283,8 +278,11 @@ public class Login extends Activity {
                 EditText editPass = (EditText) findViewById(R.id.loginPasswordField);
                 String pass = editPass.getText().toString();
                 HttpClient client = new DefaultHttpClient();
+                String passHasheado = hashearPass(pass);
+
+
                 String url = "http://" + ip + "/seekit/seekit/login?mail="
-                        + mail + "&pass=" + pass;
+                        + mail + "&pass=" + passHasheado;
                 Log.d("url", url);
                 HttpGet httpGet = new HttpGet(url);
 
@@ -348,6 +346,26 @@ public class Login extends Activity {
 
         }
 
+        private String hashearPass(String pass) {
+            MessageDigest md = null;
+            String passwordHash=null;
+            try {
+                md = MessageDigest.getInstance("SHA-1");
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+
+
+            try {
+                md.update(pass.getBytes("UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            byte[] digest = md.digest();
+            passwordHash = new BigInteger(1, digest).toString(16);
+            return passwordHash;
+        }
+
         @Override
         protected void onPostExecute(JSONObject result) {
 
@@ -360,8 +378,8 @@ public class Login extends Activity {
                 String idusu = null;
                 String mitoken = null;
                 try {
-                    idusu = jsonObj.getString("idusuario");
-                    mitoken = jsonObj.getString("token");
+                    idusu = jsonObj.getString("idUsuario");
+                    mitoken = jsonObj.getString("miToken");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -513,7 +531,7 @@ public class Login extends Activity {
                 itn.putExtra("json", jObj.toString());
                 itn.putExtra("PARENT_NAME", "Login");
                 startActivity(itn);
-                finish();
+                Login.this.finish();
             } else if (statusCode == 0) {
                 Toast.makeText(Login.this, "El servidor no ha respondido",
                         Toast.LENGTH_SHORT).show();
@@ -527,6 +545,17 @@ public class Login extends Activity {
         }
     }
 
+    private boolean isNetworkAvailable() {
+        ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+
+        boolean isAvailable = false;
+        if (networkInfo != null && networkInfo.isConnected()) {
+            isAvailable = true;
+        }
+
+        return isAvailable;
+    }
 
     public boolean isEmailValid(String email) {
         String regExpn = "^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"
@@ -537,6 +566,21 @@ public class Login extends Activity {
                 + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$";
 
         CharSequence inputStr = email;
+
+        Pattern pattern = Pattern.compile(regExpn, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(inputStr);
+
+        if (matcher.matches())
+            return true;
+        else
+            return false;
+    }
+
+    private boolean isInputTextValid(String inputText) {
+
+        String regExpn = "[a-zA-Z0-9 ]+$";
+
+        CharSequence inputStr = inputText;
 
         Pattern pattern = Pattern.compile(regExpn, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(inputStr);

@@ -17,6 +17,7 @@ public class MyAlarmReceiver extends BroadcastReceiver{
 		
 		Log.d("del extra",intent.getStringExtra("identificadores"));
 		String json=intent.getStringExtra("json");
+        String identificadores=intent.getStringExtra("identificadores");
 	    Intent i = new Intent(context, MyAlarmTestService.class);
 	    i.putExtra("json", json);
 	    i.putExtra("foo", "bar");

@@ -43,6 +43,7 @@ public class PantallaRastreo extends Activity {
 	String imgTri = null;
 	String ubicacion = null;
 	String perdido = null;
+    String descripcion=null;
 
 
 	// los 3 botones identificando las acciones posibles
@@ -76,6 +77,7 @@ public class PantallaRastreo extends Activity {
 		identificador = getIntent().getStringExtra("identificador");
 		ubicacion = getIntent().getStringExtra("ubicacion");
 		perdido = getIntent().getStringExtra("perdido");
+        descripcion = getIntent().getStringExtra("descripcion");
 		
 		TextView informe = (TextView) findViewById(R.id.textViewInformePerdido);
 			if(perdido.equals("0")){
@@ -186,6 +188,9 @@ public class PantallaRastreo extends Activity {
 					.getStringExtra("nombreTri"));
 			intent.putExtra("img", getIntent().getStringExtra("img"));
 			intent.putExtra("idTri", getIntent().getStringExtra("idTri"));
+            intent.putExtra("descripcion", getIntent().getStringExtra("descripcion"));
+            intent.putExtra("foto",getIntent().getStringExtra("foto"));
+
 			startActivity(intent);
 
 			return true;
@@ -316,4 +321,7 @@ public class PantallaRastreo extends Activity {
 		Toast.makeText(this, "Error Inesperado", Toast.LENGTH_LONG)
 		.show();
 	}
+
+
+
 }

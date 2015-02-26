@@ -17,6 +17,13 @@ import java.util.Locale;
  * one of the sections/tabs/pages.
  */
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    String idTri=null;
+    String identificador=null;
+    String nombreTri=null;
+    String img=null;
+    String json = null;
+
+
 
     protected Context mContext;
 
@@ -38,7 +45,16 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                 return sad;
 
             case 1:
-                return new FriendsFragment();
+
+                      FriendsFragment friend =  new FriendsFragment();
+
+                friend.setIdTri(idTri);
+                friend.setImg(img);
+                friend.setIdentificador(identificador);
+                friend.setNombreTri(nombreTri);
+                friend.setJson(json);
+
+                return friend;
         }
 
         return null;
@@ -71,6 +87,46 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         }
 
         return R.drawable.ic_action_share;
+    }
+
+    public String getIdTri() {
+        return idTri;
+    }
+
+    public void setIdTri(String idTri) {
+        this.idTri = idTri;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
+
+    public String getNombreTri() {
+        return nombreTri;
+    }
+
+    public void setNombreTri(String nombreTri) {
+        this.nombreTri = nombreTri;
+    }
+
+    public String getIdentificador() {
+        return identificador;
+    }
+
+    public void setIdentificador(String identificador) {
+        this.identificador = identificador;
+    }
+
+    public String getJson() {
+        return json;
+    }
+
+    public void setJson(String json) {
+        this.json = json;
     }
 }
 

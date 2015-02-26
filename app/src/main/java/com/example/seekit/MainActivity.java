@@ -1,13 +1,13 @@
 package com.example.seekit;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.sql.Array;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
-import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
@@ -20,8 +20,6 @@ import org.json.JSONObject;
 
 import com.example.backgroundTasks.MyAlarmReceiver;
 import com.example.backgroundTasks.MyAlarmReceiver2;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
 
 import contenedor.Tri;
 import contenedor.TriCompartido;
@@ -33,23 +31,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 public class MainActivity extends Activity {
 
@@ -70,6 +69,12 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.listado);
+        //preferencias
+        pref = getApplicationContext().getSharedPreferences("MyPref", 0);
+
+        editor = pref.edit();
+        //fin preferencias
+
         //IP
         try {
             ResourceBundle bundle1 = ResourceBundle.getBundle("assets/configuration");
@@ -108,7 +113,8 @@ public class MainActivity extends Activity {
 							.getString("nombre"), listaTris.getJSONObject(i)
 							.getString("foto"), listaTris.getJSONObject(i)
 							.getString("activo"), listaTris.getJSONObject(i)
-							.getString("localizacion"), listaTris
+							.getString("latitud"), listaTris.getJSONObject(i)
+                            .getString("longitud"), listaTris
 							.getJSONObject(i).getString("perdido"), listaTris
 							.getJSONObject(i).getString("compartido"), listaTris
                             .getJSONObject(i).getString("descripcion"));
@@ -205,7 +211,6 @@ public class MainActivity extends Activity {
 
 			try {
 
-				// ///////////7
 
 				Log.d("Usuario logueado:", json.toString());
 				HttpClient client = new DefaultHttpClient();
@@ -257,6 +262,7 @@ public class MainActivity extends Activity {
 		}
 
 		private void handleResult(JSONObject result) {
+            String triExistente;
 			// si anda bien, voy a pasar el objeto a la otra intent
 			Log.d("satuscode=", statusCode + "");
 			if (statusCode == 200) {
@@ -280,14 +286,21 @@ public class MainActivity extends Activity {
 								listaTris.getJSONObject(i).getString("foto"),
 								listaTris.getJSONObject(i).getString("activo"),
 								listaTris.getJSONObject(i).getString(
-										"localizacion"), listaTris
+										"latitud"),
+                                listaTris.getJSONObject(i).getString(
+                                        "longitud"), listaTris
 										.getJSONObject(i).getString("perdido"),
 								listaTris.getJSONObject(i).getString(
 										"compartido"), listaTris
                                 .getJSONObject(i).getString("descripcion"));
+
+                        //ese metodo va a crear una entrada en las preferencias, para q puedan ser accedidas desde otro lado
+                        cargarLasSharedPreferences(listaTris.getJSONObject(i)
+                                .getString("identificador"));
+
+
 						// es lo que se va a pasar al scheduler; para que los
 						// busque.
-
 						Log.d("aaa",
 								listaTris.getJSONObject(i).getString(
 										"identificador"));
@@ -321,8 +334,10 @@ public class MainActivity extends Activity {
 								.getJSONObject(j).getString("identificador"));
 						triObjComp.setIdTri(listaTrisCompartido
 								.getJSONObject(j).getString("idTri"));
-						triObjComp.setLocalizacion(listaTrisCompartido
-								.getJSONObject(j).getString("localizacion"));
+						triObjComp.setLatitud(listaTrisCompartido
+                                .getJSONObject(j).getString("latitud"));
+                        triObjComp.setLongitud(listaTrisCompartido
+                                .getJSONObject(j).getString("longitud"));
 						triObjComp.setNombre(listaTrisCompartido.getJSONObject(
 								j).getString("nombre"));
 						triObjComp.setPerdido(listaTrisCompartido
@@ -335,6 +350,11 @@ public class MainActivity extends Activity {
 						identificadoresSchedule = identificadoresSchedule
 								.concat(listaTrisCompartido.getJSONObject(j)
 										.getString("identificador") + ",");
+
+                        //ese metodo va a crear una entrada en las preferencias, para q puedan ser accedidas desde otro lado
+                        cargarLasSharedPreferences(listaTris.getJSONObject(j)
+                                .getString("identificador"));
+
 					}
 					reloadList(arrayListaTris);
 					reloadListCompartidos(arrayListaTrisCompartidos);
@@ -356,7 +376,15 @@ public class MainActivity extends Activity {
 			}
 
 		}
-		// pruebas alarm
+        //cargo en las preferencias los Tris
+        private void cargarLasSharedPreferences(String identificador) {
+            String aux = pref.getString(identificador, "null");
+            if (aux.equals("null")) {
+                editor.putString(identificador, "1");
+                editor.commit();
+            }
+        }
+        // pruebas alarm
 		// scheduleAlarm();
 
 		// fin pruebas
@@ -388,7 +416,7 @@ public class MainActivity extends Activity {
 					final ImageView imagen_entrada = (ImageView) view
 							.findViewById(R.id.imageView_imagen);
 					if (imagen_entrada != null) {
-						imagen_entrada.setImageResource(R.drawable.im_pavo);
+                        imagen_entrada.setImageBitmap(convertToImage(((Tri) entrada).getFoto()));
 
 						// hago que la imagen sea clickeable
 						imagen_entrada
@@ -408,7 +436,7 @@ public class MainActivity extends Activity {
 										String img = ((TriCompartido) entrada)
 												.getFoto();
 										String ubicacion = ((TriCompartido) entrada)
-												.getLocalizacion();
+												.getLatitud();
 										Log.d("MAin Acivity", " identificador:"
 												+ identificador);
 										Log.d("MAin Acivity", "nom:" + nombre);
@@ -454,20 +482,10 @@ public class MainActivity extends Activity {
 
 	}
 
-	private boolean isNetworkAvailable() {
-		ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo networkInfo = manager.getActiveNetworkInfo();
 
-		boolean isAvailable = false;
-		if (networkInfo != null && networkInfo.isConnected()) {
-			isAvailable = true;
-		}
-
-		return isAvailable;
-	}
 
 	public void reloadList(ArrayList<Tri> listaTris) {
-
+        Array[] trisActivos =new Array[listaTris.size()];
 		Log.d("Main Activity", "Recargando la cachoputa lista");
 		lista = (ListView) findViewById(R.id.ListView_listado);
 		lista.setAdapter(new Lista_adaptador(this, R.layout.entrada, listaTris) {
@@ -485,12 +503,34 @@ public class MainActivity extends Activity {
 							.findViewById(R.id.textView_inferior);
 					if (textoInferiorIdentificador != null)
 						textoInferiorIdentificador.setText(((Tri) entrada)
-								.getNombre());
+								.getDescripcion());
+                    //aqui haremos lo del toggle!!, actualizaremos los tris.
+                    ToggleButton toggle = (ToggleButton) view.findViewById(R.id.muteToggleButton);
+                    toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                            if (isChecked) {
+                                editor.putString(((Tri) entrada).getIdentificador(),"1");
+                                editor.commit();
+
+                            } else {
+                                editor.putString(((Tri) entrada).getIdentificador(),"0");
+                                editor.commit();
+
+                            }
+                        }
+                    });
+
+                    //fin del toggle.
+
+
 
 					final ImageView imagenEntradaImg = (ImageView) view
 							.findViewById(R.id.imageView_imagen);
 					if (imagenEntradaImg != null) {
-						imagenEntradaImg.setImageResource(R.drawable.im_pavo);
+
+						//imagenEntradaImg.setImageResource(R.drawable.im_pavo);
+                        imagenEntradaImg.setImageBitmap(convertToImage(((Tri) entrada).getFoto()));
+
 
 						// hago que la imagen sea clickeable
 						imagenEntradaImg
@@ -503,19 +543,22 @@ public class MainActivity extends Activity {
 										Intent intent = new Intent(
 												MainActivity.this,
 												PantallaRastreo.class);
-										String identificador = textoInferiorIdentificador
-												.getText().toString();
+										String identificador = ((Tri) entrada).getIdentificador();
 										String nombre = textoSuperiorNombre
 												.getText().toString();
 										String img = ((Tri) entrada).getFoto();
 										String perdido = ((Tri) entrada)
 												.getPerdido();
 										String ubicacion = ((Tri) entrada)
-												.getLocalizacion();
+												.getLatitud()+" "+((Tri) entrada)
+                                                .getLongitud();
+                                        String descripcion = ((Tri) entrada)
+                                                .getDescripcion();
 										Log.d("MAin Acivity", " identificador:"
 												+ identificador);
 										Log.d("MAin Acivity", "nom:" + nombre);
 										Log.d("MAin Acivity", "img:" + img);
+                                        Log.d("MAin Acivity", "descripcion:" + descripcion);
 
 										if (parentActivity.equals("Login")) {
 											intent.putExtra("json",
@@ -534,6 +577,8 @@ public class MainActivity extends Activity {
 										intent.putExtra("idTri",
 												((Tri) entrada).getIdTri());
 										intent.putExtra("perdido", perdido);
+                                        intent.putExtra("descripcion", descripcion);
+
 										startActivity(intent);
 										// Toast toast =
 										// Toast.makeText(MainActivity.this,
@@ -678,7 +723,7 @@ public class MainActivity extends Activity {
 
 				startActivity(intent);
 			} catch (Exception e) {
-				Log.d("ACA NUNCA DEBO ESTAR", "ACA NUNCA DEBO ESTAR");
+				Log.d("HOUSTONNNN", "WIIIIIUUUU WIIIIUUUU WIIIIUUUU");
 			}
 
 			return true;
@@ -725,7 +770,7 @@ public class MainActivity extends Activity {
 		// Setup periodic alarm every 50 seconds
 		long firstMillis = System.currentTimeMillis(); // first run of alarm is
 														// immediate
-		int intervalMillis = 10000; // 5 seconds
+		int intervalMillis = 1000000; // 5 seconds
 		AlarmManager alarm = (AlarmManager) this
 				.getSystemService(Context.ALARM_SERVICE);
 		alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, firstMillis,
@@ -746,13 +791,13 @@ public class MainActivity extends Activity {
         // Setup periodic alarm every 50 seconds
         long firstMillis = System.currentTimeMillis(); // first run of alarm is
         // immediate
-        int intervalMillis = 60000; // 60 seconds
+        int intervalMillis = 600000; // 60 seconds
         AlarmManager alarm = (AlarmManager) this
                 .getSystemService(Context.ALARM_SERVICE);
         alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, firstMillis,
                 intervalMillis, pIntent);
     }
-
+//cancelamos las alarmas.
 	public void cancelAlarm() {
 		Intent intent = new Intent(getApplicationContext(),
 				MyAlarmReceiver.class);
@@ -776,5 +821,31 @@ public class MainActivity extends Activity {
     }
 
 	// fin pruebas schedule
+    private boolean isNetworkAvailable() {
+        ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+
+        boolean isAvailable = false;
+        if (networkInfo != null && networkInfo.isConnected()) {
+            isAvailable = true;
+        }
+
+        return isAvailable;
+    }
+
+    //transforma el string a una imagen
+    public Bitmap convertToImage(String image){
+        try{
+            InputStream stream = new ByteArrayInputStream(Base64.decode(image.getBytes(), Base64.DEFAULT));
+
+            Bitmap bitmap = BitmapFactory.decodeStream(stream);
+            Log.v("Ben", "Image Converted");
+            return bitmap;
+        }
+        catch (Exception e) {
+
+            return null;
+        }
+    }
 
 }
