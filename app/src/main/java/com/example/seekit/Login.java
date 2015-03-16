@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Properties;
@@ -50,6 +51,7 @@ import android.os.Handler;
 
 import android.util.Log;
 
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -159,7 +161,6 @@ public class Login extends Activity {
     }
 
 
-
     //registro
     void inicializadores() {
         textViewRegistrarse = (TextView) findViewById(R.id.registrarse);
@@ -213,7 +214,7 @@ public class Login extends Activity {
 
             // EMPIEZAAA
             /*
-			 * final String[] arrayAux = new String[4]; final String mailAux =
+             * final String[] arrayAux = new String[4]; final String mailAux =
 			 * sMail; AsyncHttpClient client = new AsyncHttpClient(); String url
 			 * = "http://192.168.56.1:8080/seekit/seekit/login" + "?mail=" +
 			 * sMail + "&contrasenia=" + sContrasena; Log.d("asdasdasd", url);
@@ -278,8 +279,19 @@ public class Login extends Activity {
                 EditText editPass = (EditText) findViewById(R.id.loginPasswordField);
                 String pass = editPass.getText().toString();
                 HttpClient client = new DefaultHttpClient();
-                String passHasheado = hashearPass(pass);
 
+
+                String passUTF8 = pass;
+
+                try {
+
+                    passUTF8 = URLEncoder.encode(pass, "utf-8");
+
+                } catch (UnsupportedEncodingException e1) {
+
+                    e1.printStackTrace();
+                }
+                String passHasheado = hashearPass(passUTF8);
 
                 String url = "http://" + ip + "/seekit/seekit/login?mail="
                         + mail + "&pass=" + passHasheado;
@@ -303,7 +315,7 @@ public class Login extends Activity {
                             builder.append(line);
                             Log.d("Login", line);
                             jsonResponse = new JSONObject(line);
-                            jObj=jsonResponse;
+                            jObj = jsonResponse;
                         }
                     }
 
@@ -348,7 +360,7 @@ public class Login extends Activity {
 
         private String hashearPass(String pass) {
             MessageDigest md = null;
-            String passwordHash=null;
+            String passwordHash = null;
             try {
                 md = MessageDigest.getInstance("SHA-1");
             } catch (NoSuchAlgorithmException e) {
@@ -423,8 +435,8 @@ public class Login extends Activity {
     }
 
     private class GetTokenTask extends AsyncTask<Object, Void, JSONObject> {
-        private String idusuToken=null;
-        private String mitoken=null;
+        private String idusuToken = null;
+        private String mitoken = null;
 
         public String getIdusuToken() {
             return idusuToken;
@@ -450,7 +462,7 @@ public class Login extends Activity {
             try {
 
                 HttpClient client = new DefaultHttpClient();
-                String url = "http://" + ip + "/seekit/seekit/getToken?idUsuario="+getIdusuToken()+"&token="+getMitoken();
+                String url = "http://" + ip + "/seekit/seekit/getToken?idUsuario=" + getIdusuToken() + "&token=" + getMitoken();
                 Log.d("url", url);
                 HttpGet httpGet = new HttpGet(url);
 
@@ -591,4 +603,13 @@ public class Login extends Activity {
             return false;
     }
 
+    //si estoy en el login, que se quede tranki
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            moveTaskToBack(true);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 }

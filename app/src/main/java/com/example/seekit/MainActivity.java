@@ -58,8 +58,8 @@ public class MainActivity extends Activity {
 	int statusCode = -1;
 	JSONArray jsonArray = null;
 	String parentActivity = null;
-	private String identificadoresSchedule = ",";
-	// empecemos con algo de guardar los datos
+	private String identificadoresSchedule="";
+	//empecemos con algo de guardar los datos
 	SharedPreferences pref = null;
 	Editor editor = null;
     String ip=null;
@@ -103,7 +103,7 @@ public class MainActivity extends Activity {
 
 				Log.d("Actividad padre?", parentActivity);
 
-				json.getJSONObject("usuario").getString("nombre");
+
 				JSONArray listaTris = json.getJSONArray("listaTris");
 				ArrayList<Tri> arrayListaTris = new ArrayList<Tri>();
 				for (int i = 0; i < listaTris.length(); i++) {
@@ -294,6 +294,7 @@ public class MainActivity extends Activity {
 										"compartido"), listaTris
                                 .getJSONObject(i).getString("descripcion"));
 
+
                         //ese metodo va a crear una entrada en las preferencias, para q puedan ser accedidas desde otro lado
                         cargarLasSharedPreferences(listaTris.getJSONObject(i)
                                 .getString("identificador"));
@@ -360,9 +361,9 @@ public class MainActivity extends Activity {
 					reloadListCompartidos(arrayListaTrisCompartidos);
 
 					// scheduler
-					scheduleAlarm();
+					//scheduleAlarm();
                     //scheduler2
-                    scheduleAlarm2();
+                    //scheduleAlarm2();
 
 				} catch (JSONException e) {
 
@@ -770,7 +771,7 @@ public class MainActivity extends Activity {
 		// Setup periodic alarm every 50 seconds
 		long firstMillis = System.currentTimeMillis(); // first run of alarm is
 														// immediate
-		int intervalMillis = 1000000; // 5 seconds
+		int intervalMillis = 20000; // 20 seconds
 		AlarmManager alarm = (AlarmManager) this
 				.getSystemService(Context.ALARM_SERVICE);
 		alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, firstMillis,
@@ -791,7 +792,7 @@ public class MainActivity extends Activity {
         // Setup periodic alarm every 50 seconds
         long firstMillis = System.currentTimeMillis(); // first run of alarm is
         // immediate
-        int intervalMillis = 600000; // 60 seconds
+        int intervalMillis = 15000; // 15 seconds
         AlarmManager alarm = (AlarmManager) this
                 .getSystemService(Context.ALARM_SERVICE);
         alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, firstMillis,
@@ -836,6 +837,12 @@ public class MainActivity extends Activity {
     //transforma el string a una imagen
     public Bitmap convertToImage(String image){
         try{
+            Log.d("imagen es", image);
+            //image="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";
+            //Log.d("imagen es", image);
+            /*byte[] decodedByte = Base64.decode(image, 0);
+            return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);*/
+
             InputStream stream = new ByteArrayInputStream(Base64.decode(image.getBytes(), Base64.DEFAULT));
 
             Bitmap bitmap = BitmapFactory.decodeStream(stream);
@@ -843,9 +850,10 @@ public class MainActivity extends Activity {
             return bitmap;
         }
         catch (Exception e) {
-
+            e.printStackTrace();
             return null;
         }
     }
+
 
 }

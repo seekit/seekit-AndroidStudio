@@ -210,11 +210,13 @@ public class Registro extends Activity {
                 EditText eIngresarContrasena = (EditText) findViewById(R.id.registroPasswordField);
                 String pass = eIngresarContrasena.getText().toString();
 
+                String passUTF8=pass;
                 String nombreUTF8=null;
                 String apellidoUTF8=null;
                 try {
                     nombreUTF8 = URLEncoder.encode(nombre, "utf-8");
                     apellidoUTF8 = URLEncoder.encode(apellido, "utf-8");
+                    passUTF8=URLEncoder.encode(pass, "utf-8");
                 } catch (UnsupportedEncodingException e1) {
                     // TODO Auto-generated catch block
                     e1.printStackTrace();
@@ -222,7 +224,7 @@ public class Registro extends Activity {
 
                 HttpClient client = new DefaultHttpClient();
 
-                String passHasheado = hashearPass(pass);
+                String passHasheado = hashearPass(passUTF8);
                 String url="http://"+ip+"/seekit/seekit/register?mail="
                 + mail + "&pass=" + passHasheado
                 + "&nombre=" + nombreUTF8 + "&apellido=" + apellidoUTF8;

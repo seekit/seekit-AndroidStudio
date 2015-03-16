@@ -57,7 +57,8 @@
                 android:id="@+id/muteToggleButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|center_horizontal"/>
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:checked="true"/>
         </LinearLayout>
     </LinearLayout>
 

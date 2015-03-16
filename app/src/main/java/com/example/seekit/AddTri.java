@@ -39,6 +39,7 @@ import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
@@ -52,6 +53,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -66,14 +68,28 @@ public class AddTri extends Activity {
     private ImageView triImage;
 
     int statusCode = -1;
-    private String ip = "192.168.0.105:8080";
+    private String ip=null;
     private String imagenTri = "null";
-
+    JSONObject json = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_tri);
+        try {
+            ResourceBundle bundle1 = ResourceBundle.getBundle("assets/configuration");
+            ip = bundle1.getString("ip");
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+        try {
+            json = new JSONObject(getIntent().getStringExtra(
+                    "json"));
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         triImage = (ImageView) findViewById(R.id.photoNewTri);
 
@@ -163,18 +179,17 @@ public class AddTri extends Activity {
                     // bm = Bitmap.createScaledBitmap(bm, 70, 70, true);
 
 
-
                     //pasar imagen a String
-
+                    triImage.setImageBitmap(bm);
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     Bitmap photo = bm;
                     photo.compress(Bitmap.CompressFormat.JPEG, 75, baos);
                     byte[] imageBytes = baos.toByteArray();
                     String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-                    imagenTri = encodedImage.replaceAll("\\s+","");
+                    imagenTri = encodedImage.replaceAll("\\s+", "");
 
 
-                    triImage.setImageBitmap(convertToImage(imagenTri));
+                    //triImage.setImageBitmap(convertToImage(imagenTri));
                     Log.d("imaegen", imagenTri);
                     //fin decodificacion
 
@@ -216,7 +231,7 @@ public class AddTri extends Activity {
                     byte[] imageBytes = baos.toByteArray();
                     String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
 
-                    imagenTri = encodedImage.replaceAll("\\s+","");
+                    imagenTri = encodedImage.replaceAll("\\s+", "");
 
 
                 } catch (IOException e) {
@@ -307,6 +322,11 @@ public class AddTri extends Activity {
             return;
         }
 
+        if (!isInputTextValid2(editMAC)) {
+            eEditMAC.setError("Formato invalido");
+            return;
+        }
+
 
         if (isNetworkAvailable()) {
 
@@ -345,22 +365,32 @@ public class AddTri extends Activity {
 
                 String nombreUTF8 = null;
                 String descripcionUTF8 = null;
-
+                String identificadorUTF8=identificador;
                 try {
                     nombreUTF8 = URLEncoder.encode(nombre, "utf-8");
                     descripcionUTF8 = URLEncoder.encode(descripcion, "utf-8");
+                    identificadorUTF8=URLEncoder.encode(identificador, "utf-8");
 
                 } catch (UnsupportedEncodingException e1) {
 
                     e1.printStackTrace();
                 }
+                String aux="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";
+                try {
 
-                String url = "http://" + ip + "/seekit/seekit/addTri?idUsuario="
-                        +
-                        "29" + "&identificador="
-                        + identificador + "&nombre=" + nombreUTF8
-                        + "&foto=" + imagenTri  + "&descripcion=" + descripcionUTF8;
+                    aux=URLEncoder.encode(aux, "utf-8");
 
+                } catch (UnsupportedEncodingException e1) {
+
+                    e1.printStackTrace();
+                }
+                String id = json.getString("idUsuario");
+                String url = "http://" + ip + "/seekit/seekit/addTri?idUsuario=" + id
+
+                        + "&identificador="
+                        + identificadorUTF8 + "&nombre=" + nombreUTF8
+                        + "&foto=" + aux + "&descripcion=" + descripcionUTF8;
+                //imagenTri
 
                 Log.d("URL", url);
 
@@ -395,7 +425,7 @@ public class AddTri extends Activity {
             if (statusCode == 200) {
                 Intent intent = new Intent(AddTri.this, MainActivity.class);
                 intent.putExtra("PARENT_NAME", "addTri");
-                intent.putExtra("json", getIntent().getStringExtra("json"));
+                intent.putExtra("json", json.toString());
                 startActivity(intent);
                 finish();
 
@@ -407,10 +437,15 @@ public class AddTri extends Activity {
 
                 } else {
 
-
-                    Toast.makeText(AddTri.this,
-                            "Houston, we have a problem",
-                            Toast.LENGTH_LONG).show();
+                    if(statusCode==406){
+                        Toast.makeText(AddTri.this,
+                                "Este identificador ya existe",
+                                Toast.LENGTH_LONG).show();
+                    }else {
+                        Toast.makeText(AddTri.this,
+                                "Houston, we have a problem",
+                                Toast.LENGTH_LONG).show();
+                    }
 
                 }
 
@@ -423,6 +458,19 @@ public class AddTri extends Activity {
 
     public boolean isInputTextValid(String inputText) {
         String regExpn = "[a-zA-Z ]+$";
+
+        CharSequence inputStr = inputText;
+
+        Pattern pattern = Pattern.compile(regExpn, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(inputStr);
+
+        if (matcher.matches())
+            return true;
+        else
+            return false;
+    }
+    public boolean isInputTextValid2(String inputText) {
+        String regExpn = "[a-zA-Z]+$";
 
         CharSequence inputStr = inputText;
 
@@ -448,14 +496,13 @@ public class AddTri extends Activity {
     }
 
 
+    public Bitmap convertToImage(String u) {
 
-    public Bitmap convertToImage(String u){
-
-        try{
-            InputStream stream = new ByteArrayInputStream(Base64.decode(u.getBytes(),Base64.DEFAULT));
-            Bitmap b= BitmapFactory.decodeStream(stream);
+        try {
+            InputStream stream = new ByteArrayInputStream(Base64.decode(u.getBytes(), Base64.DEFAULT));
+            Bitmap b = BitmapFactory.decodeStream(stream);
             return b;
-        }catch ( Exception e){
+        } catch (Exception e) {
 
             return null;
         }

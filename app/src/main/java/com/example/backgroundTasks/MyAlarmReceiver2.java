@@ -19,7 +19,7 @@ public class MyAlarmReceiver2 extends BroadcastReceiver{
 		String json=intent.getStringExtra("json");
 	    Intent i = new Intent(context, MyAlarmTestService2.class);
 	    i.putExtra("json", json);
-	    i.putExtra("foo", "Y bue");
+
 	    context.startService(i);
 	  }
 

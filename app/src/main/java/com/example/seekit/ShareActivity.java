@@ -213,9 +213,6 @@ public class ShareActivity extends FragmentActivity implements
 
     }
 
-    public void descompartir(View view) {
-
-    }
 
 
 

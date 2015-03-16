@@ -28,8 +28,12 @@ public class Tri {
         this.descripcion=descripcion;
 	}
 
+    public Tri() {
 
-	public String getIdTri() {
+    }
+
+
+    public String getIdTri() {
 		return idTri;
 	}
 

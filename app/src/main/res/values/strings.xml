@@ -23,6 +23,8 @@
 -->
     <string name="app_name">SeekIt</string>
     <string name="action_settings">Cerrar Sesión</string>
+    <string name="action_eliminar_tri">Eliminar Tri</string>
+    <string name="action_eliminar_usu">Eliminar Usuario</string>
     <string name="action_edit_user">Editar perfil</string>
     <string name="action_tri">Borrar TRI</string>
     <string name="action_new">Agregar TRI</string>

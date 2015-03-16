@@ -21,8 +21,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -35,10 +38,17 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.backgroundTasks.MyAlarmReceiver;
+import com.example.backgroundTasks.MyAlarmReceiver2;
+
 public class EditarUsuario extends Activity {
 
 	int statusCode = -1;
     String ip=null;
+    JSONObject json=null;
+    // empecemos con algo de guardar los datos
+    SharedPreferences pref = null;
+    SharedPreferences.Editor editor = null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -53,9 +63,9 @@ public class EditarUsuario extends Activity {
             e.printStackTrace();
         }
         //fin IP
-		JSONObject obj =null;
+
 		try {
-			obj = new JSONObject(getIntent().getStringExtra(
+			json = new JSONObject(getIntent().getStringExtra(
 					"json"));
 		} catch (JSONException e) {
 			Log.d("Si estoy aca","Marchamos");
@@ -67,9 +77,9 @@ public class EditarUsuario extends Activity {
 		EditText eIngresarMail = (EditText) findViewById(R.id.editUsuarioUserMail);
 
 		try {
-			eIngresarNombre.setText(obj.getString("nombre"));
-			eIngresarApellido.setText(obj.getString("apellido"));
-			eIngresarMail.setText(obj.getString("mail"));
+			eIngresarNombre.setText(json.getString("nombre"));
+			eIngresarApellido.setText(json.getString("apellido"));
+			eIngresarMail.setText(json.getString("mail"));
 
 		} catch (JSONException e) {
 			Log.d("Si estoy aca","Marchamos");
@@ -91,7 +101,17 @@ public class EditarUsuario extends Activity {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
+		if (id == R.id.action_eliminar_usuario) {
+            if (isNetworkAvailable()) {
+
+                GetEliminarUsuTask getEliminarTriTask = new GetEliminarUsuTask();
+                getEliminarTriTask.execute();
+            } else {
+                Toast.makeText(this, "Network is unavailable!",
+                        Toast.LENGTH_LONG).show();
+            }
+
+
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -199,8 +219,7 @@ public class EditarUsuario extends Activity {
 
 				HttpClient client = new DefaultHttpClient();
 
-				JSONObject obj = new JSONObject(getIntent().getStringExtra(
-						"json"));
+
                 String url;
 
                 String passHasheadoOld = hashearPass(passOld);
@@ -208,7 +227,7 @@ public class EditarUsuario extends Activity {
 
                 if (TextUtils.isEmpty(passNew)) {
                     url = "http://" + ip + "/seekit/seekit/editarUsuario?idUsuario="
-                            + obj.getString("idUsuario")
+                            + json.getString("idUsuario")
                             + "&nombre="
                             + nombre
                             + "&apellido="
@@ -220,7 +239,7 @@ public class EditarUsuario extends Activity {
 
                 }else {
                     url = "http://" + ip + "/seekit/seekit/editarUsuario?idUsuario="
-                            + obj.getString("idUsuario")
+                            + json.getString("idUsuario")
                             + "&nombre="
                             + nombre
                             + "&apellido="
@@ -370,5 +389,111 @@ public class EditarUsuario extends Activity {
             return true;
         else
             return false;
+    }
+    private class GetEliminarUsuTask extends
+            AsyncTask<Object, Void, JSONObject> {
+
+        @Override
+        protected JSONObject doInBackground(Object... params) {
+
+            JSONObject jsonResponse = null;
+
+            try {
+                HttpClient client = new DefaultHttpClient();
+                String url="http://"+ip+"/seekit/seekit/getEliminarUsuario?idUsuario="
+                        + json.getString("idUsuario");
+                Log.d("url",
+                        url);
+
+                HttpGet httpGet = new HttpGet(url);
+
+                try {
+
+                    HttpResponse response = client.execute(httpGet);
+                    StatusLine statusLine = response.getStatusLine();
+                    statusCode = statusLine.getStatusCode();
+
+                } catch (Exception e) {
+
+                    e.printStackTrace();
+
+                }
+
+            } catch (Exception e) {
+                Log.d("PORQUE NO ANDA4", "Unsuccessful HTTP Response Code:");
+                e.printStackTrace();
+            }
+            return jsonResponse;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject result) {
+
+            handleResult(result);
+        }
+
+        private void handleResult(JSONObject result) {
+
+
+
+            if (statusCode == 200) {
+
+                try {
+
+                    // Voy a eliminar las preferencias.
+                    pref = getApplicationContext()
+                            .getSharedPreferences("MyPref", 0);
+                    editor = pref.edit();
+                    editor.clear().commit();
+                    cancelAlarm();
+                    cancelAlarm2();
+
+
+                } catch (Exception e) {
+                    Log.d("ACA NUNCA DEBO ESTAR", "ACA NUNCA DEBO ESTAR");
+                }
+
+
+                try {
+                    Intent intent = new Intent(EditarUsuario.this, Login.class);
+                    intent.putExtra("json", json.toString());
+                    intent.putExtra("PARENT_NAME", "EditarTri");
+
+                    startActivity(intent);
+                    EditarUsuario.this.finish();
+
+                } catch (Exception e) {
+                    Log.d("ACA NUNCA DEBO ESTAR", "ACA NUNCA DEBO ESTAR");
+                }
+            } else if (statusCode == 0) {
+
+            } else {
+
+            }
+
+        }
+
+    }
+    //cancelamos las alarmas.
+    public void cancelAlarm() {
+        Intent intent = new Intent(getApplicationContext(),
+                MyAlarmReceiver.class);
+        final PendingIntent pIntent = PendingIntent.getBroadcast(this,
+                MyAlarmReceiver.REQUEST_CODE, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarm = (AlarmManager) this
+                .getSystemService(Context.ALARM_SERVICE);
+        alarm.cancel(pIntent);
+    }
+
+    public void cancelAlarm2() {
+        Intent intent = new Intent(getApplicationContext(),
+                MyAlarmReceiver2.class);
+        final PendingIntent pIntent = PendingIntent.getBroadcast(this,
+                MyAlarmReceiver.REQUEST_CODE, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarm = (AlarmManager) this
+                .getSystemService(Context.ALARM_SERVICE);
+        alarm.cancel(pIntent);
     }
 }

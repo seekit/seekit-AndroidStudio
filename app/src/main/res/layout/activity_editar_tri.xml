@@ -16,36 +16,23 @@
         android:layout_width="match_parent"
         android:layout_height="0dp">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/balloon"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:scaleType="fitXY"
-            android:contentDescription="Main Image"
-            android:padding="1dp" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/photoEditTri"
+            android:layout_width="220dp"
+            android:layout_height="220dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/image_border"
 
-            android:contentDescription="Image Border"
-            android:padding="0dp" />
+            android:src="@drawable/camera"
+            app:border_width="2dp"
+            app:border_color="#FF000000"
+            />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:background="@drawable/edit_states"
-            android:clickable="true"
 
-            android:contentDescription="image"
-            android:padding="4dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/ic_action_edit" />
+
 
 
     </RelativeLayout>
